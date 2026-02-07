@@ -1,0 +1,56 @@
+﻿@model List<Actualizador_Precios.Models.AlertaCambioCosto>
+
+
+@if(ViewBag.Message != null)
+{
+    <div class="alert alert-info">
+        @ViewBag.Message
+    </div>
+}
+
+<h2>La presente tabla contiene los productos que han recibido un cambio en sus costos, ya sea el ultimo el el costo promedio</h2>
+
+<br />
+<br />
+
+@if (Model != null && Model.Count > 0)
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Clave Articulo</th>
+                <th>Descripcion</th>
+                <th>Costo Promedio Anterior</th>
+                <th>Costo Promedio Nuevo</th>
+                <th>Ultimo Costo Anterior</th>
+                <th>Ultimo Costo Nuevo</th>
+                <th>Fecha del Cambio</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var item in Model)
+            {
+                <tr>
+                    <td>@item.CVE_ART</td>
+                    <td>@item.Descripcion</td>
+                    <td>@item.CostoProm_Ant.ToString("C")</td>
+                    <td>@item.CostoProm_Nvo.ToString("C")</td>
+                    <td>@item.UltCosto_Ant.ToString("C")</td>
+                    <td>@item.UltCosto_Nvo.ToString("C")</td>
+                    <td>@item.FechaCambio.ToString("g")</td>
+                    <td></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No se han detectado cambios en los costos de los productos.</p>
+}
+
+
+
+
+
