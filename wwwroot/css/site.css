@@ -1,5 +1,31 @@
+/* === Actualizador de precios — tema visual === */
+:root {
+  --app-font: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --app-bg: #eef2f6;
+  --app-bg-pattern: radial-gradient(ellipse 120% 80% at 100% -20%, rgba(13, 148, 136, 0.12), transparent 50%),
+    radial-gradient(ellipse 80% 60% at 0% 100%, rgba(99, 102, 241, 0.08), transparent 45%);
+  --app-surface: #ffffff;
+  --app-surface-elevated: #ffffff;
+  --app-text: #0f172a;
+  --app-text-muted: #64748b;
+  --app-border: rgba(15, 23, 42, 0.08);
+  --app-primary: #0d9488;
+  --app-primary-hover: #0f766e;
+  --app-primary-soft: rgba(13, 148, 136, 0.12);
+  --app-accent: #6366f1;
+  --app-nav-bg: #0f172a;
+  --app-nav-text: rgba(248, 250, 252, 0.88);
+  --app-nav-muted: rgba(248, 250, 252, 0.55);
+  --app-shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --app-shadow-md: 0 8px 24px -4px rgba(15, 23, 42, 0.08), 0 4px 8px -4px rgba(15, 23, 42, 0.04);
+  --app-radius: 14px;
+  --app-radius-sm: 10px;
+}
+
 html {
-  font-size: 14px;
+  font-size: 15px;
+  position: relative;
+  min-height: 100%;
 }
 
 @media (min-width: 768px) {
@@ -8,24 +34,436 @@ html {
   }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
 body {
-  margin-bottom: 60px;
+  font-family: var(--app-font);
+  margin: 0;
+  margin-bottom: 0;
+  min-height: 100vh;
+  color: var(--app-text);
+  background-color: var(--app-bg);
+  background-image: var(--app-bg-pattern);
+  background-attachment: fixed;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+/* Navbar */
+.app-navbar {
+  background: var(--app-nav-bg) !important;
+  border: none !important;
+  box-shadow: var(--app-shadow-md);
+  padding-top: 0.65rem;
+  padding-bottom: 0.65rem;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+.app-navbar .navbar-brand {
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: -0.02em;
+  color: #fff !important;
+}
+
+.app-navbar .nav-link {
+  color: var(--app-nav-muted) !important;
+  font-weight: 500;
+  padding: 0.5rem 1rem !important;
+  border-radius: var(--app-radius-sm);
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.app-navbar .nav-link:hover,
+.app-navbar .nav-link:focus {
+  color: var(--app-nav-text) !important;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.app-navbar .nav-link.active {
+  color: #fff !important;
+  background: rgba(13, 148, 136, 0.25);
+}
+
+.app-navbar .navbar-toggler {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.app-navbar .navbar-toggler-icon {
+  filter: invert(1);
+}
+
+/* Contenedor alineado (nav, contenido, pie) */
+.app-layout.container {
+  max-width: 1200px;
+}
+
+/* Footer */
+.app-footer {
+  margin-top: auto;
+  padding: 1.25rem 0;
+  background: transparent;
+  border-top: 1px solid var(--app-border);
+  color: var(--app-text-muted);
+  font-size: 0.875rem;
+}
+
+.app-footer__text {
+  margin: 0;
+  line-height: 1.6;
+}
+
+.app-footer__link {
+  color: var(--app-primary);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.app-footer__link:hover {
+  color: var(--app-primary-hover);
+  border-bottom-color: rgba(13, 148, 136, 0.45);
+}
+
+/* Buttons — coherencia con tema */
+.btn-primary {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: var(--app-primary);
+  --bs-btn-border-color: var(--app-primary);
+  --bs-btn-hover-bg: var(--app-primary-hover);
+  --bs-btn-hover-border-color: var(--app-primary-hover);
+  --bs-btn-active-bg: #115e59;
+  --bs-btn-active-border-color: #115e59;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  padding: 0.6rem 1.35rem;
+  border-radius: var(--app-radius-sm);
+  box-shadow: 0 2px 8px rgba(13, 148, 136, 0.35);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 4px 14px rgba(13, 148, 136, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-lg {
+  padding: 0.75rem 1.75rem;
+  border-radius: var(--app-radius-sm);
+}
+
+.btn-outline-light {
+  border-radius: var(--app-radius-sm);
+  font-weight: 500;
+}
+
+/* Inicio — bienvenida */
+.home-welcome {
+  position: relative;
+  padding: 0.5rem 0 1rem;
+}
+
+.home-welcome__shell {
+  position: relative;
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 0.25rem;
+}
+
+.home-welcome__glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(48px);
+  opacity: 0.55;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.home-welcome__glow--1 {
+  width: min(280px, 70vw);
+  height: min(280px, 70vw);
+  top: -4rem;
+  right: -3rem;
+  background: rgba(13, 148, 136, 0.35);
+}
+
+.home-welcome__glow--2 {
+  width: min(200px, 50vw);
+  height: min(200px, 50vw);
+  bottom: -2rem;
+  left: -2rem;
+  background: rgba(99, 102, 241, 0.2);
+}
+
+.home-welcome__card {
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+  border: 1px solid var(--app-border);
+  border-radius: calc(var(--app-radius) + 6px);
+  box-shadow: var(--app-shadow-md);
+  padding: clamp(1.75rem, 4vw, 2.5rem);
+  overflow: hidden;
+}
+
+.home-welcome__ribbon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--app-primary), #14b8a6 45%, var(--app-accent));
+  opacity: 0.95;
+}
+
+.home-welcome__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
+}
+
+.home-welcome__logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--app-primary-soft);
+  color: var(--app-primary);
+}
+
+.home-welcome__brand-text {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--app-text-muted);
+}
+
+.home-welcome__title {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  color: var(--app-text);
+  margin: 0 0 1rem;
+}
+
+.home-welcome__lead {
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: var(--app-text-muted);
+  margin: 0 0 1.75rem;
+  max-width: 34ch;
+}
+
+.home-welcome__cta {
+  margin-bottom: 0.25rem;
+}
+
+.home-welcome__btn {
+  width: 100%;
+}
+
+@media (min-width: 480px) {
+  .home-welcome__btn {
+    width: auto;
+    min-width: 14rem;
+  }
+}
+
+.home-welcome__cta-note {
+  font-size: 0.8125rem;
+  color: var(--app-text-muted);
+  margin: 0.85rem 0 0;
+  line-height: 1.45;
+  max-width: 36ch;
+}
+
+.home-welcome__divider {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--app-border) 15%,
+    var(--app-border) 85%,
+    transparent
+  );
+  margin: 1.75rem 0 1.25rem;
+}
+
+.home-welcome__credit {
+  font-size: 0.875rem;
+  color: var(--app-text-muted);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.home-welcome__credit strong {
+  color: var(--app-text);
+  font-weight: 600;
+}
+
+/* Página alertas */
+.page-header {
+  margin-bottom: 1.75rem;
+}
+
+.page-eyebrow {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--app-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.35rem;
+}
+
+.page-title {
+  font-size: clamp(1.5rem, 3vw, 1.85rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+  color: var(--app-text-muted);
+  font-size: 1rem;
+  max-width: 65ch;
+  line-height: 1.55;
+  margin-bottom: 0;
+}
+
+.alert.app-flash {
+  border: none;
+  border-radius: var(--app-radius-sm);
+  border-left: 4px solid;
+}
+
+.alert-danger.app-flash,
+.alert.app-flash.alert-danger {
+  border-left-color: #dc2626;
+  background: rgba(220, 38, 38, 0.08);
+  color: #991b1b;
+}
+
+.alert-info.app-flash {
+  border-left-color: var(--app-accent);
+  background: rgba(99, 102, 241, 0.08);
+  color: #4338ca;
+}
+
+.data-card {
+  background: var(--app-surface-elevated);
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius);
+  box-shadow: var(--app-shadow-sm);
+  overflow: hidden;
+}
+
+.table-responsive.app-table-scroll {
+  margin: 0;
+}
+
+.app-data-table {
+  margin-bottom: 0;
+  font-size: 0.9375rem;
+}
+
+.app-data-table thead th {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--app-text-muted);
+  background: #f8fafc;
+  border-bottom: 1px solid var(--app-border);
+  padding: 0.9rem 1rem;
+  white-space: nowrap;
+}
+
+.app-data-table tbody td {
+  padding: 0.85rem 1rem;
+  vertical-align: middle;
+  border-color: var(--app-border);
+}
+
+.app-data-table tbody tr:hover {
+  background: rgba(13, 148, 136, 0.04);
+}
+
+.app-data-table .col-code {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--app-text);
+}
+
+.app-data-table .col-money {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.app-data-table .col-date {
+  font-variant-numeric: tabular-nums;
+  color: var(--app-text-muted);
+  font-size: 0.875rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1.5rem;
+}
+
+.empty-state-icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(145deg, var(--app-primary-soft), rgba(99, 102, 241, 0.1));
+  color: var(--app-primary);
+}
+
+.empty-state-icon svg {
+  width: 36px;
+  height: 36px;
+  opacity: 0.9;
+}
+
+.empty-state h2 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+  color: var(--app-text-muted);
+  max-width: 36ch;
+  margin: 0 auto;
+  font-size: 0.9375rem;
+}
+
+.modal-precios-table thead th {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--app-text-muted);
+  background: #f8fafc;
+  border-bottom: 1px solid var(--app-border);
+}
+
+.modal-precios-table td {
+  vertical-align: middle;
+}
+
+.modal-content .form-control-sm.precio-nuevo-input {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Focus visible */
+.btn:focus-visible,
+.nav-link:focus-visible {
+  box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.45);
 }

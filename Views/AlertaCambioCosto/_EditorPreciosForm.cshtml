@@ -1,0 +1,75 @@
+@model EditorPreciosFormModel
+
+<div class="modal-content">
+<form asp-action="GuardarPrecios" asp-controller="AlertaCambioCosto" method="post" id="formGuardarPrecios">
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 small mb-0 mx-3 mt-3" role="alert"></div>
+    <input type="hidden" asp-for="IdAlerta" />
+    <input type="hidden" asp-for="CVE_ART" />
+
+    <div class="modal-header border-bottom-0 pb-0">
+        <div>
+            <h5 class="modal-title fw-bold" id="modalPreciosTitulo">Actualizar precios de venta</h5>
+            <p class="text-muted small mb-0 mt-1">
+                <span class="font-monospace">@Model.CVE_ART</span>
+                @if (!string.IsNullOrWhiteSpace(Model.Descripcion))
+                {
+                    <span>— @Model.Descripcion</span>
+                }
+            </p>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+    </div>
+
+    <div class="modal-body pt-2">
+        @if (Model.Lineas.Count == 0)
+        {
+            <p class="text-muted small mb-3">
+                No hay precios por lista para este artículo. Al guardar solo se marcará la alerta como revisada.
+            </p>
+        }
+        else
+        {
+            <p class="text-muted small mb-3">
+                Ajuste el precio de cada lista de venta. Los cambios se guardan al confirmar.
+            </p>
+            <div class="table-responsive">
+                <table class="table table-sm align-middle modal-precios-table mb-0">
+                    <thead>
+                        <tr>
+                            <th>Lista de precios</th>
+                            <th style="width: 7rem;">Clave</th>
+                            <th style="width: 8.5rem;">Precio actual</th>
+                            <th style="width: 8.5rem;">Precio nuevo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (var i = 0; i < Model.Lineas.Count; i++)
+                        {
+                            <tr>
+                                <td>
+                                    <input type="hidden" asp-for="Lineas[i].CvePrecio" />
+                                    <span class="small">@Model.Lineas[i].DescripcionLista</span>
+                                </td>
+                                <td class="font-monospace small text-muted">@Model.Lineas[i].CvePrecio</td>
+                                <td>
+                                    <input type="hidden" asp-for="Lineas[i].PrecioActual" />
+                                    <input type="text" class="form-control form-control-sm" readonly value="@Model.Lineas[i].PrecioActual.ToString("N4")" />
+                                </td>
+                                <td>
+                                    <input asp-for="Lineas[i].PrecioNuevo" class="form-control form-control-sm precio-nuevo-input" type="number" step="any" min="0" />
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+
+    <div class="modal-footer border-top-0 pt-0">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+    </div>
+</form>
+</div>

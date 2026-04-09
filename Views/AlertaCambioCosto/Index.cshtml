@@ -1,56 +1,125 @@
 ﻿@model List<Actualizador_Precios.Models.AlertaCambioCosto>
-
-
-@if(ViewBag.Message != null)
-{
-    <div class="alert alert-info">
-        @ViewBag.Message
-    </div>
+@{
+    ViewData["Title"] = "Alertas de costo";
 }
 
-<h2>La presente tabla contiene los productos que han recibido un cambio en sus costos, ya sea el ultimo el el costo promedio</h2>
+<div class="page-header">
+    <p class="page-eyebrow mb-0">Inventario / Costos</p>
+    <h1 class="page-title">Alertas de cambio de costo</h1>
+    <p class="page-subtitle">
+        Productos con variación en costo promedio o último costo. Use <strong>Actualizar precios</strong> para revisar las listas de precios y cerrar la alerta.
+    </p>
+</div>
 
-<br />
-<br />
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success app-flash mb-4" role="alert">@TempData["Message"]</div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger app-flash mb-4" role="alert">@TempData["ErrorMessage"]</div>
+}
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-info app-flash mb-4" role="alert">@ViewBag.Message</div>
+}
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger app-flash mb-4" role="alert">@ViewBag.ErrorMessage</div>
+}
 
 @if (Model != null && Model.Count > 0)
 {
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Clave Articulo</th>
-                <th>Descripcion</th>
-                <th>Costo Promedio Anterior</th>
-                <th>Costo Promedio Nuevo</th>
-                <th>Ultimo Costo Anterior</th>
-                <th>Ultimo Costo Nuevo</th>
-                <th>Fecha del Cambio</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach(var item in Model)
-            {
-                <tr>
-                    <td>@item.CVE_ART</td>
-                    <td>@item.Descripcion</td>
-                    <td>@item.CostoProm_Ant.ToString("C")</td>
-                    <td>@item.CostoProm_Nvo.ToString("C")</td>
-                    <td>@item.UltCosto_Ant.ToString("C")</td>
-                    <td>@item.UltCosto_Nvo.ToString("C")</td>
-                    <td>@item.FechaCambio.ToString("g")</td>
-                    <td></td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="data-card">
+        <div class="table-responsive app-table-scroll">
+            <table class="table app-data-table align-middle">
+                <thead>
+                    <tr>
+                        <th scope="col">Clave</th>
+                        <th scope="col">Descripción</th>
+                        <th scope="col">Costo prom. anterior</th>
+                        <th scope="col">Costo prom. nuevo</th>
+                        <th scope="col">Últ. costo ant.</th>
+                        <th scope="col">Últ. costo nuevo</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="col-code">@item.CVE_ART</td>
+                            <td>@item.Descripcion</td>
+                            <td class="col-money text-muted">@(item.CostoProm_Ant?.ToString("C") ?? "—")</td>
+                            <td class="col-money">@(item.CostoProm_Nvo?.ToString("C") ?? "—")</td>
+                            <td class="col-money text-muted">@(item.UltCosto_Ant?.ToString("C") ?? "—")</td>
+                            <td class="col-money">@(item.UltCosto_Nvo?.ToString("C") ?? "—")</td>
+                            <td class="col-date">@(item.FechaCambio?.ToString("g") ?? "—")</td>
+                            <td>
+                                <button type="button"
+                                        class="btn btn-sm btn-primary js-open-editor-precios"
+                                        data-id-alerta="@item.IdAlerta">
+                                    Actualizar precios
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <p class="text-muted small mt-3 mb-0">Mostrando <strong>@Model.Count</strong> alerta@(Model.Count == 1 ? "" : "s") pendiente@(Model.Count == 1 ? "" : "s").</p>
 }
 else
 {
-    <p>No se han detectado cambios en los costos de los productos.</p>
+    <div class="data-card">
+        <div class="empty-state">
+            <div class="empty-state-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            </div>
+            <h2>No hay alertas pendientes</h2>
+            <p>No se detectan productos con cambios de costo sin revisar. Cuando el ERP registre nuevos movimientos, aparecerán aquí.</p>
+        </div>
+    </div>
 }
 
+<div class="modal fade" id="modalPrecios" tabindex="-1" aria-labelledby="modalPreciosTitulo" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div id="modalPreciosRoot"></div>
+    </div>
+</div>
 
+@section Scripts {
+    <script>
+        (function () {
+            var modalEl = document.getElementById('modalPrecios');
+            var root = document.getElementById('modalPreciosRoot');
+            if (!modalEl || !root) return;
 
+            var editorUrl = '@Url.Action("EditorPrecios", "AlertaCambioCosto")';
 
+            document.querySelectorAll('.js-open-editor-precios').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    var id = btn.getAttribute('data-id-alerta');
+                    root.innerHTML = '<div class="modal-content"><div class="p-5 text-center text-muted">Cargando…</div></div>';
+                    var modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+                    modal.show();
 
+                    fetch(editorUrl + '?idAlerta=' + encodeURIComponent(id), {
+                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                    })
+                        .then(function (r) { return r.text(); })
+                        .then(function (html) { root.innerHTML = html; })
+                        .catch(function () {
+                            root.innerHTML = '<div class="modal-content"><div class="alert alert-danger m-3 mb-0">No se pudo cargar el editor.</div></div>';
+                        });
+                });
+            });
+
+            modalEl.addEventListener('hidden.bs.modal', function () {
+                root.innerHTML = '';
+            });
+        })();
+    </script>
+}

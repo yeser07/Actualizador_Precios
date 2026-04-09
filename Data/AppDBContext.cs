@@ -11,9 +11,9 @@
 
         }
 
-        //DBSETS
         public DbSet<AlertaCambioCosto> AlertaCambioCosto { get; set; }
-
+        public DbSet<PrecioProducto> PrecioProductos { get; set; }
+        public DbSet<ListaPrecio> ListaPrecios { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

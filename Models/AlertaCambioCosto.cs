@@ -8,17 +8,22 @@ namespace Actualizador_Precios.Models
     {
         [Key]
         public int IdAlerta { get; set; }
-        public string CVE_ART { get; set; }
 
-        public string Descripcion { get; set; }
+        [StringLength(50)]
+        public string? CVE_ART { get; set; }
 
-        public decimal CostoProm_Ant { get; set; }
-        public decimal CostoProm_Nvo { get; set; }
-        public decimal UltCosto_Ant { get; set; }
-        public decimal UltCosto_Nvo { get; set; }
+        [StringLength(255)]
+        public string? Descripcion { get; set; }
 
-        public DateTime FechaCambio { get; set; }
+        public decimal? CostoProm_Ant { get; set; }
+        public decimal? CostoProm_Nvo { get; set; }
+        public decimal? UltCosto_Ant { get; set; }
+        public decimal? UltCosto_Nvo { get; set; }
 
-        public bool Revisado { get; set; }
+        public DateTime? FechaCambio { get; set; }
+
+        public bool? Revisado { get; set; }
+
+        public DateTime? FechaRevision { get; set; }
     }
 }
