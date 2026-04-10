@@ -123,5 +123,24 @@ namespace Actualizador_Precios.Repository
                 throw;
             }
         }
+
+        /// <summary>
+        /// Marca la alerta como revisada sin modificar precios de venta.
+        /// </summary>
+        public async Task MarcarSoloRevisadaAsync(int idAlerta)
+        {
+            var alerta = await _context.AlertaCambioCosto
+                .FirstOrDefaultAsync(a => a.IdAlerta == idAlerta);
+
+            if (alerta == null)
+                throw new InvalidOperationException("La alerta no existe.");
+            if (alerta.Revisado == true)
+                throw new InvalidOperationException("La alerta ya estaba revisada.");
+
+            alerta.Revisado = true;
+            alerta.FechaRevision = DateTime.Now;
+
+            await _context.SaveChangesAsync();
+        }
     }
 }

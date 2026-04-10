@@ -74,5 +74,28 @@ namespace Actualizador_Precios.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> MarcarRevisada(int idAlerta)
+        {
+            if (idAlerta <= 0)
+            {
+                TempData["ErrorMessage"] = "Identificador de alerta no válido.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            try
+            {
+                await _repository.MarcarSoloRevisadaAsync(idAlerta);
+                TempData["Message"] = "Alerta marcada como revisada (sin cambios de precio).";
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "No se pudo marcar la alerta: " + ex.Message;
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

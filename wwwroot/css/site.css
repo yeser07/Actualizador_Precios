@@ -156,6 +156,39 @@ body {
   font-weight: 500;
 }
 
+/* Botones con icono (SVG inline) */
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+}
+
+.btn-icon svg {
+  width: 1.125rem;
+  height: 1.125rem;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+.btn-sm.btn-icon svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.btn-lg.btn-icon svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.btn-icon--trailing svg {
+  order: 2;
+}
+
+.modal-footer .btn-icon {
+  min-height: 2.375rem;
+}
+
 /* Inicio — bienvenida */
 .home-welcome {
   position: relative;
